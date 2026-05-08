@@ -66,7 +66,7 @@ def refresh_access_token(db: Session, refresh_token: str) -> TokenResponse:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Refresh token has been revoked",
         )
-    if rt.expires_at < datetime.now(timezone.utc):
+    if rt.expires_at.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Refresh token has expired",
